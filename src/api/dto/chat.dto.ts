@@ -65,6 +65,10 @@ class Key {
   id: string;
   fromMe: boolean;
   remoteJid: string;
+  // Group read receipts are addressed to the sender inside the group. Without
+  // participant WhatsApp silently discards the receipt, so the chat stays
+  // unread even though readMessages resolves fine.
+  participant?: string;
 }
 export class ReadMessageDto {
   readMessages: Key[];
