@@ -3678,7 +3678,12 @@ export class BaileysStartupService extends ChannelStartupService {
       const keys: proto.IMessageKey[] = [];
       data.readMessages.forEach((read) => {
         if (isJidGroup(read.remoteJid) || isPnUser(read.remoteJid)) {
-          keys.push({ remoteJid: read.remoteJid, fromMe: read.fromMe, id: read.id });
+          const key: proto.IMessageKey = { remoteJid: read.remoteJid, fromMe: read.fromMe, id: read.id };
+          // A receipt for a group message must name the participant who sent it.
+          if (read.participant) {
+            key.participant = read.participant;
+          }
+          keys.push(key);
         }
       });
       await this.client.readMessages(keys);
